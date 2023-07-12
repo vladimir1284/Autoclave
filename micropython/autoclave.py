@@ -86,18 +86,13 @@ def write_DO (DO, val):
     
     return [current_register_h,current_register_l ]
 
-# di_dict = {
-#     0: DI0,
-#     1: DI1,
-# }
-# di_dict[DI].value()
 
 def Read_DI(DI):
     if DI > 7:
         OE_U9.on()
         OE_U10.off()
         DI_value = DI0.value()
-        pass
+        #OE_U10.on()
     else:
         OE_U9.off()
         OE_U10.on()
@@ -127,6 +122,7 @@ def Read_DI(DI):
             pass
         else :
             pass
+        #OE_U9.on()
     return DI_value
 
 
