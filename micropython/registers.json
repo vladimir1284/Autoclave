@@ -1,0 +1,83 @@
+{
+    "COILS": {
+        "RESET_REGISTER_DATA_COIL": {
+            "register": 42,
+            "len": 1,
+            "val": 0
+        },
+        "Cooling Drain": {
+            "register": 4,
+            "len": 1,
+            "val": 0
+        },
+        "Compresed air to chamber": {
+            "register": 5,
+            "len": 1,
+            "val": 0
+        },
+        "ATM Air": {
+            "register": 6,
+            "len": 1,
+            "val": 0
+        },
+        "Fast Exah": {
+            "register": 7,
+            "len": 1,
+            "val": 0
+        },
+        "Vacuum": {
+            "register": 8,
+            "len": 1,
+            "val": 0
+        },
+        "Condence": {
+            "register": 9,
+            "len": 1,
+            "val": 0
+        },
+        "Door Ring": {
+            "register": 10,
+            "len": 1,
+            "val": 0
+        },
+        "Cool pipe Flw": {
+            "register": 11,
+            "len": 1,
+            "val": 0
+         },
+         "Vacumm breaker": {
+            "register": 12,
+            "len": 1,
+            "val": 0
+         },
+         "Heather": {
+            "register": 13,
+            "len": 1,
+            "val": 0
+         },
+         "Vac pump": {
+            "register": 14,
+            "len": 1,
+            "val": 0
+         },
+         "Water pump": {
+            "register": 11,
+            "len": 1,
+            "val": 0
+         },
+    },
+    "ISTS": {
+        "EXAMPLE_ISTS": {
+            "register": 67,
+            "len": 1,
+            "val": 0
+        }
+    },
+    "IREGS": {
+        "EXAMPLE_IREG": {
+            "register": 100,
+            "len": 1,
+            "val": 60001
+        }
+    }
+}
