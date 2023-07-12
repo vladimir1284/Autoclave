@@ -86,6 +86,11 @@ def write_DO (DO, val):
     
     return [current_register_h,current_register_l ]
 
+# di_dict = {
+#     0: DI0,
+#     1: DI1,
+# }
+# di_dict[DI].value()
 
 def Read_DI(DI):
     if DI > 7:
