@@ -1,7 +1,6 @@
 import machine
 import time
 import pcf8574
-import ssd1306
 import utime
 
 # Pin d
@@ -29,9 +28,9 @@ sdaPIN=machine.Pin(21)
 sclPIN=machine.Pin(22)
 
 cs_pin = machine.Pin(5, machine.Pin.OUT)
-clk_pin = machine.Pin(18, machine.Pin.OUT)
-miso_pin = machine.Pin(19, machine.Pin.IN)
-mosi_pin = machine.Pin(23, machine.Pin.OUT)
+# clk_pin = machine.Pin(18, machine.Pin.OUT)
+# miso_pin = machine.Pin(19, machine.Pin.IN)
+# mosi_pin = machine.Pin(23, machine.Pin.OUT)
 
 PCF8574_address = 0x20
 current_register_h =0b000000000
@@ -40,10 +39,11 @@ current_register_l =0b000000000
 # Create instance
 i2c= machine.SoftI2C(sclPIN, sdaPIN)
 pcf = pcf8574.PCF8574(i2c, PCF8574_address)
-spi = machine.SPI(1, baudrate=100000, polarity=0, phase=0, sck=clk_pin, mosi=None, miso=miso_pin)
- 
+# spi = machine.SPI(1, baudrate=100000, polarity=0, phase=0, sck=clk_pin, mosi=None, miso=miso_pin)
+# Define SPI bus pins
+spi = machine.SPI(2, baudrate=1000000, polarity=0, phase=0)
 
-#  functions
+#  funct
 def init_Out():
     LE_U7.on()
     LE_U8.off()
@@ -59,9 +59,15 @@ def init_Out():
     OE_U9.on()
 
 
-def write_DO (DO, value):
+def write_DO (DO, val):
     global current_register_l
     global current_register_h
+    if val:
+        value = 1
+    else:
+        value = 0
+    
+    
     if DO > 7:
        DO = DO-8 
        LE_U7.off()
@@ -69,12 +75,14 @@ def write_DO (DO, value):
        out_register =(current_register_h & ~(1 << DO)) | (value << DO)
        pcf.port = out_register
        current_register_h = out_register
+       LE_U8.off()
     else :
        LE_U7.on()
        LE_U8.off()
        out_register =(current_register_l & ~(1 << DO)) | (value << DO)
        pcf.port = out_register
        current_register_l = out_register
+       LE_U7.off()
     
     return [current_register_h,current_register_l ]
 
@@ -150,31 +158,22 @@ def set_adc_channel(ad_channel):
         S3.on()
     else:
         pass
-    
-def read_mcp3201():
-    cs_pin.off()
-    time.sleep_us(1)
-    buffer = bytearray(2)
-    spi.readinto(buffer)
-    cs_pin.on()
-    value = ((buffer[0] & 0x0F) <<8) | buffer[1]
-    return value
 
+
+# Read function for MCP3201 ADC
 def read_adc(channel):
-    # Select the MCP3201
-     cs_pin.value(0)
+    # Select MCP3201 ADC
+    cs_pin.value(0)
+    
+    # Read the 12-bit ADC value
+    data=spi.read(2)
+    
+    # Deselect MCP3201 ADC
+    cs_pin.value(1)
+    
+    msb = data[0]
+    lsb = data[1]
+    adc_value = ((msb << 7) | (lsb >> 1)) & 0xfff
 
-    # Send the start bit and channel selection byte
-     cmd = bytearray([0x06, (channel & 0x0F) << 6, 0x00])
-     spi.write_readinto(cmd, cmd)
-    # Deselect the MCP3201
-     cs_pin.value(1)
-
-    # Extract the ADC value from the data bytes
-     value = ((cmd[1] & 0x0F) << 8) | cmd[2]
-     return value
-
-
-
-
-
+    return adc_value
+    
