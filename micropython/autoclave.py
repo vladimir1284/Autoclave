@@ -87,7 +87,7 @@ def write_DO (DO, val):
     return [current_register_h,current_register_l ]
 
 
-def Read_DI(DI):
+def read_DI(DI):
     if DI > 7:
         OE_U9.on()
         OE_U10.off()
@@ -96,73 +96,44 @@ def Read_DI(DI):
     else:
         OE_U9.off()
         OE_U10.on()
-        if DI == 0:
-            DI_value = DI0.value()
-            pass
-        elif DI == 1:
-            DI_value = DI1.value()
-            pass
-        elif DI == 2:
-            DI_value = DI2.value()
-            pass
-        elif DI == 3:
-            DI_value = DI3.value()
-            pass
-        elif DI == 4:
-            DI_value = DI4.value()
-            pass
-        elif DI == 5:
-            DI_value = DI5.value()
-            pass
-        elif DI == 6:
-            DI_value = DI6.value()
-            pass
-        elif DI == 7:
-            DI_value = DI7.value()
-            pass
-        else :
-            pass
-        #OE_U9.on()
+        DI_value = None
+        
+        if 0 <= DI <= 7:
+            DI_value = globals()[f"DI{DI}"].value()
+        
     return DI_value
 
-
-def set_adc_channel(ad_channel):
-    if ad_channel== 0:
-        S0.off()
-        S1.off()
-        S2.off()
-        S3.off()
-    elif ad_channel== 2:
-        S0.off()
-        S1.on()
-        S2.off()
-        S3.off()
-    elif ad_channel== 3:
-        S0.on()
-        S1.on()
-        S2.off()
-        S3.off()
-    elif ad_channel== 5:
-        S0.on()
-        S1.off()
-        S2.on()
-        S3.off()
-    elif ad_channel== 7:
-        S0.on()
-        S1.on()
-        S2.on()
-        S3.off()
-    elif ad_channel== 10:
-        S0.off()
-        S1.on()
-        S2.off()
-        S3.on()
-    else:
-        pass
+# Map channel numbers to corresponding configuration values
+channel_config = {
+    0: (False, False, False, False),
+    1: (False, False, False, True)
+    2: (False, True, False, False),
+    3: (True, True, False, False),
+    4: (False, True, False , False),
+    5: (True, False, True, False),
+    6: (False, True, True, False),
+    7: (True, True, True, False),
+    8: (True, False, False, False),
+    9: (True, False, False, True),
+    10: (False, True, False, True)
+}
 
 
 # Read function for MCP3201 ADC
-def read_adc(channel):
+def read_adc( ad_channel):
+
+    if ad_channel in channel_config:
+        # Get the configuration values for the specified channel
+        s0, s1, s2, s3 = channel_config[ad_channel]
+        # Set the pin values accordingly
+        S0.value(s0) 
+        S1.value(s1)
+        S2.value(s2)
+        S3.value(s3)
+    else:
+        # Channel not found in the configuration map
+        pass
+
     # Select MCP3201 ADC
     cs_pin.value(0)
     
