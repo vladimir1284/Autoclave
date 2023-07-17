@@ -39,8 +39,8 @@ station.active(False)
 time.sleep(1)
 station.active(True)
 
-#station.connect('Robert_cell', 'robert08907')
-station.connect('LADETEC', 'Tech1234')
+station.connect('Robert_cell', 'robert08907')
+# station.connect('LADETEC', 'Tech1234')
 time.sleep(1)
 
 while True:
@@ -88,9 +88,11 @@ def my_coil_get_cb(reg_type, address, val):
           format(reg_type, address, val))
 
 
-def my_discrete_inputs_register_get_cb(reg_type, address, val):   
-    val = autoclave.Read_DI(address)
-    client.set_ist(address=address, value=val)
+def my_discrete_inputs_register_get_cb(reg_type, address, val):
+    dict_rd = {0: False, 1:True} 
+    val = autoclave.read_DI(address)
+     
+    client.set_ist(address=address, value=dict_rd[val])
     print('Custom callback, called on getting {} at {}, currently: {}'.
           format(reg_type, address, val))
 
@@ -140,7 +142,12 @@ register_definitions['COILS']['Door Ring']['off_set_cb'] = my_coil_set_cb
 # register_definitions['ISTS']['EXAMPLE_ISTS']['on_get_cb'] = \
 #     my_discrete_inputs_register_get_cb
 register_definitions['ISTS']['Door Close']['on_get_cb'] = \
-    my_discrete_inputs_register_get_cb
+      my_discrete_inputs_register_get_cb
+
+register_definitions['ISTS']['Ring Open']['on_get_cb'] = \
+      my_discrete_inputs_register_get_cb
+# register_definitions['ISTS']['Ring Close']['on_get_cb'] = \
+#     my_discrete_inputs_register_get_cb
 
 
 register_definitions['IREGS']['EXAMPLE_IREG']['on_get_cb'] = \

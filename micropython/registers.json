@@ -5,79 +5,167 @@
             "len": 1,
             "val": 0
         },
+         "Water to coil": {
+            "register": 2,
+            "len": 1,
+            "val": 0
+        },
         "Cooling Drain": {
-            "register": 4,
+            "register": 3,
             "len": 1,
             "val": 0
         },
         "Compresed air to chamber": {
-            "register": 5,
+            "register": 4,
             "len": 1,
             "val": 0
         },
         "ATM Air": {
-            "register": 6,
+            "register": 5,
             "len": 1,
             "val": 0
         },
         "Fast Exah": {
-            "register": 7,
+            "register": 6,
             "len": 1,
             "val": 0
         },
         "Vacuum": {
-            "register": 8,
+            "register": 7,
             "len": 1,
             "val": 0
         },
         "Condence": {
-            "register": 9,
+            "register": 8,
             "len": 1,
             "val": 0
         },
         "Door Ring": {
-            "register": 10,
+            "register": 9,
             "len": 1,
             "val": 0
         },
-        "Cool pipe Flw": {
-            "register": 11,
+        "Cool pipe Flush": {
+            "register": 10,
             "len": 1,
             "val": 0
          },
          "Vacumm breaker": {
-            "register": 12,
-            "len": 1,
-            "val": 0
-         },
-         "Heather": {
-            "register": 13,
-            "len": 1,
-            "val": 0
-         },
-         "Vac pump": {
-            "register": 14,
-            "len": 1,
-            "val": 0
-         },
-         "Water pump": {
             "register": 11,
             "len": 1,
             "val": 0
          },
+         "Heather": {
+            "register": 12,
+            "len": 1,
+            "val": 0
+         },
+         "Vac pump": {
+            "register": 13,
+            "len": 1,
+            "val": 0
+         },
+         "Water pump": {
+            "register": 14,
+            "len": 1,
+            "val": 0
+         }
     },
     "ISTS": {
         "EXAMPLE_ISTS": {
             "register": 67,
             "len": 1,
             "val": 0
+        },
+        "Door Close": {
+            "register": 0,
+            "len": 1,
+            "val": 0
+        },
+        "Ring Open": {
+            "register": 1,
+            "len": 1,
+            "val": 0
+        },
+        "Ring Close": {
+            "register": 2,
+            "len": 1,
+            "val": 0
+        },
+        "Flow sw Gen Pump": {
+            "register": 3,
+            "len": 1,
+            "val": 0
+        },
+        "Flow sw Var Pump": {
+            "register": 4,
+            "len": 1,
+            "val": 0
+        },
+        "Ring Close2": {
+            "register": 5,
+            "len": 1,
+            "val": 0
+        },
+        "Ring Close3": {
+            "register": 6,
+            "len": 1,
+            "val": 0
+        },
+        "Ring Close4": {
+            "register": 7,
+            "len": 1,
+            "val": 0
+        },
+        "Gasket sw": {
+            "register": 8,
+            "len": 1,
+            "val": 0
         }
+    
+    
+
     },
     "IREGS": {
         "EXAMPLE_IREG": {
             "register": 100,
             "len": 1,
             "val": 60001
+        },
+        "Elect Low": {
+            "register":0,
+            "len": 1,
+            "val": 0
+        },
+        "Elect Chamber": {
+            "register":2,
+            "len": 1,
+            "val": 0
+        },
+        "Chamber Press": {
+            "register":3,
+            "len": 1,
+            "val": 0
+        },
+        "Chamber Temp": {
+            "register":5,
+            "len": 1,
+            "val": 0
+        },
+        "Chamber Temp2": {
+            "register":7,
+            "len": 1,
+            "val": 0
+        },
+        "Drain Temp": {
+            "register":10,
+            "len": 1,
+            "val": 0
         }
+    
+
+         
     }
-}
+        
+
+    }

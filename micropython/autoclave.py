@@ -57,7 +57,7 @@ def init_Out():
     OE_U10.on()
     utime.sleep_ms(500)
     OE_U9.on()
-
+ 
 
 def write_DO (DO, val):
     global current_register_l
@@ -106,16 +106,16 @@ def read_DI(DI):
 # Map channel numbers to corresponding configuration values
 channel_config = {
     0: (False, False, False, False),
-    1: (False, False, False, True)
-    2: (False, True, False, False),
-    3: (True, True, False, False),
+    1: (False, False, False, True),
+    2: (False, False, True, False),
+    3: (False, False, True, True),
     4: (False, True, False , False),
-    5: (True, False, True, False),
+    5: (False, True, False , True),
     6: (False, True, True, False),
-    7: (True, True, True, False),
+    7: (False, True, True, True),
     8: (True, False, False, False),
     9: (True, False, False, True),
-    10: (False, True, False, True)
+    10: (True, False, True, False)
 }
 
 
