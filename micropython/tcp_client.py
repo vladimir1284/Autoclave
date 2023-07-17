@@ -18,6 +18,13 @@ import time
 import machine
 import json
 import utime
+import pcf8574
+import autoclave
+
+import gc
+gc.collect()
+
+
 
 # import modbus client classes
 from umodbus.tcp import ModbusTCP
@@ -32,7 +39,8 @@ station.active(False)
 time.sleep(1)
 station.active(True)
 
-station.connect('robert_cell', 'robert08907')
+#station.connect('Robert_cell', 'robert08907')
+station.connect('LADETEC', 'Tech1234')
 time.sleep(1)
 
 while True:
@@ -61,30 +69,35 @@ is_bound = client.get_bound_status()
 
 if not is_bound:
     client.bind(local_ip=local_ip, local_port=tcp_port)
-
-
+#    mio
+    
+val_dict = {True: 1, False: 0}
 def my_coil_set_cb(reg_type, address, val):
+    autoclave.S1.value(val_dict[val[0]])
     print('Custom callback, called on setting {} at {} to: {}'.
           format(reg_type, address, val))
-    if val:
-        led.on()
-    else:
-        led.off()
-
+   
+   
+# mio
+       
+    
+  
 
 def my_coil_get_cb(reg_type, address, val):
     print('Custom callback, called on getting {} at {}, currently: {}'.
           format(reg_type, address, val))
 
 
-def my_discrete_inputs_register_get_cb(reg_type, address, val):
+def my_discrete_inputs_register_get_cb(reg_type, address, val):   
+    val = autoclave.Read_DI(address)
+    client.set_ist(address=address, value=val)
     print('Custom callback, called on getting {} at {}, currently: {}'.
           format(reg_type, address, val))
 
 def my_inputs_register_get_cb(reg_type, address, val):
     # usage of global isn't great, but okay for an example
     global client
-
+    
     print('Custom callback, called on getting {} at {}, currently: {}'.
           format(reg_type, address, val))
 
@@ -117,13 +130,19 @@ with open('registers.json', 'r') as file:
 # add callbacks for different Modbus functions
 # each register can have a different callback
 # coils and holding register support callbacks for set and get
-register_definitions['COILS']['Door Ring']['on_set_cb'] = my_coil_set_cb
-register_definitions['COILS']['Door Ring']['on_get_cb'] = my_coil_get_cb
+register_definitions['COILS']['Door Ring']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Door Ring']['off_set_cb'] = my_coil_set_cb
+
+# register_definitions['COILS']['Door Ring']['on_get_cb'] = my_coil_get_cb
 
 # discrete inputs and input registers support only get callbacks as they can't
 # be set externally
-register_definitions['ISTS']['EXAMPLE_ISTS']['on_get_cb'] = \
+# register_definitions['ISTS']['EXAMPLE_ISTS']['on_get_cb'] = \
+#     my_discrete_inputs_register_get_cb
+register_definitions['ISTS']['Door Close']['on_get_cb'] = \
     my_discrete_inputs_register_get_cb
+
+
 register_definitions['IREGS']['EXAMPLE_IREG']['on_get_cb'] = \
     my_inputs_register_get_cb
 
@@ -132,7 +151,7 @@ register_definitions['COILS']['RESET_REGISTER_DATA_COIL']['on_set_cb'] = \
     reset_data_registers_cb
 
 print('Setting up hardware ...')
-led = machine.Pin(2, machine.Pin.OUT)
+
 
 print('Setting up registers ...')
 # use the defined values of each register type provided by register_definitions
@@ -142,6 +161,10 @@ client.setup_registers(registers=register_definitions)
 print('Register setup done')
 
 print('Serving as TCP client on {}:{}'.format(local_ip, tcp_port))
+
+
+
+
 
 while True:
     try:
