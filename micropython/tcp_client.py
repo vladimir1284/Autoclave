@@ -12,19 +12,16 @@ specific values by a host device.
 The TCP port and IP address can be choosen freely. The register definitions of
 the client can be defined by the user.
 """
+HARDWARE_CONNECTED = True
 
 # system packages
 import time
-import machine
 import json
-import utime
-import pcf8574
-import autoclave
 
-import gc
-gc.collect()
-
-
+if HARDWARE_CONNECTED:
+    import autoclave
+else:
+    import urandom
 
 # import modbus client classes
 from umodbus.tcp import ModbusTCP
@@ -40,7 +37,8 @@ time.sleep(1)
 station.active(True)
 
 station.connect('Robert_cell', 'robert08907')
-# station.connect('LADETEC', 'Tech1234')
+#station.connect('LADETEC', 'Tech1234')
+
 time.sleep(1)
 
 while True:
@@ -89,10 +87,17 @@ def my_coil_get_cb(reg_type, address, val):
 
 
 def my_discrete_inputs_register_get_cb(reg_type, address, val):
-    dict_rd = {0: False, 1:True} 
-    val = autoclave.read_DI(address)
-     
-    client.set_ist(address=address, value=dict_rd[val])
+    value = []
+    if HARDWARE_CONNECTED:
+        dict_rd = {0: False, 1:True}
+        for i, di in enumerate(val):
+            di = autoclave.read_DI(address+i)
+            value.append(dict_rd[di])
+    else:
+        for di in val:
+            value.append(urandom.getrandbits(1))
+        
+    client.set_ist(address=address, value=value)
     print('Custom callback, called on getting {} at {}, currently: {}'.
           format(reg_type, address, val))
 

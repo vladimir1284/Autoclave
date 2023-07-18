@@ -1,2 +1,4 @@
 testApp/secrets.yaml
 testApp/test.log
+bin/*
+lib/*
