@@ -45,6 +45,8 @@ spi = machine.SPI(2, baudrate=1000000, polarity=0, phase=0)
 
 #  funct
 def init_Out():
+    current_register_h =0b000000000
+    current_register_l =0b000000000
     LE_U7.on()
     LE_U8.off()
     OE.off()
@@ -57,33 +59,29 @@ def init_Out():
     OE_U10.on()
     utime.sleep_ms(500)
     OE_U9.on()
- 
+
 
 def write_DO (DO, val):
     global current_register_l
     global current_register_h
-    if val:
-        value = 1
-    else:
-        value = 0
     
-    
+     
     if DO > 7:
        DO = DO-8 
        LE_U7.off()
        LE_U8.on()
-       out_register =(current_register_h & ~(1 << DO)) | (value << DO)
+       out_register =(current_register_h & ~(1 << DO)) | (val << DO)
        pcf.port = out_register
        current_register_h = out_register
-       LE_U8.off()
+#        LE_U8.off()
     else :
        LE_U7.on()
        LE_U8.off()
-       out_register =(current_register_l & ~(1 << DO)) | (value << DO)
+       out_register =(current_register_l & ~(1 << DO)) | (val << DO)
        pcf.port = out_register
        current_register_l = out_register
-       LE_U7.off()
-    
+#        LE_U7.off()
+       print(DO,val)
     return [current_register_h,current_register_l ]
 
 
@@ -92,14 +90,12 @@ def read_DI(DI):
         OE_U9.on()
         OE_U10.off()
         DI_value = DI0.value()
-        #OE_U10.on()
-    else:
+    elif 0 <= DI <= 7:
         OE_U9.off()
         OE_U10.on()
+        DI_value = globals()[f"DI{DI}"].value()
+    else:
         DI_value = None
-        
-        if 0 <= DI <= 7:
-            DI_value = globals()[f"DI{DI}"].value()
         
     return DI_value
 
@@ -110,7 +106,7 @@ channel_config = {
     2: (False, False, True, False),
     3: (False, False, True, True),
     4: (False, True, False , False),
-    5: (False, True, False , True),
+    5: (False, True, False, True),
     6: (False, True, True, False),
     7: (False, True, True, True),
     8: (True, False, False, False),
@@ -124,7 +120,7 @@ def read_adc( ad_channel):
 
     if ad_channel in channel_config:
         # Get the configuration values for the specified channel
-        s0, s1, s2, s3 = channel_config[ad_channel]
+        s3, s2, s1, s0 = channel_config[ad_channel]
         # Set the pin values accordingly
         S0.value(s0) 
         S1.value(s1)

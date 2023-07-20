@@ -71,7 +71,10 @@ if not is_bound:
     
 val_dict = {True: 1, False: 0}
 def my_coil_set_cb(reg_type, address, val):
-    autoclave.S1.value(val_dict[val[0]])
+#     autoclave.S1.value(val_dict[val[0]])
+    a = val_dict[val[0]]
+    print(a)             
+    autoclave.write_DO(address,val_dict[val[0]])
     print('Custom callback, called on setting {} at {} to: {}'.
           format(reg_type, address, val))
    
@@ -88,36 +91,49 @@ def my_coil_get_cb(reg_type, address, val):
 
 def my_discrete_inputs_register_get_cb(reg_type, address, val):
     value = []
+    add = []
     if HARDWARE_CONNECTED:
+        
         dict_rd = {0: False, 1:True}
         for i, di in enumerate(val):
-            di = autoclave.read_DI(address+i)
+            
+            di = autoclave.read_DI(address +i)
             value.append(dict_rd[di])
+            
+            add.append(address + i)
+            print(add,value)
     else:
         for di in val:
             value.append(urandom.getrandbits(1))
-        
+    value.reverse()    
     client.set_ist(address=address, value=value)
-    print('Custom callback, called on getting {} at {}, currently: {}'.
-          format(reg_type, address, val))
+#     print('Custom callback, called on getting {} at {}, currently: {}'.
+#           format(reg_type, address, val))
 
 def my_inputs_register_get_cb(reg_type, address, val):
     # usage of global isn't great, but okay for an example
     global client
-    
+    adc_value = []
+    for i, dadc in enumerate(val):
+            
+            dadc = autoclave.read_adc(address +i)
+            adc_value.append([dadc])
+            
+#     adc_value.append(new_val)
+    print(adc_value)
     print('Custom callback, called on getting {} at {}, currently: {}'.
           format(reg_type, address, val))
 
     # any operation should be as short as possible to avoid response timeouts
-    new_val = val[0] + 1
+#     new_val = val[0] + 1
 
     # It would be also possible to read the latest ADC value at this time
     # adc = machine.ADC(12)     # check MicroPython port specific syntax
     # new_val = adc.read()
-
-    client.set_ireg(address=address, value=new_val)
-    print('Incremented current value by +1 before sending response')
-
+#     adc_value = [500,300,4000,100] 
+    client.set_ireg(address=address, value=adc_value)
+#     print('Incremented current value by +1 before sending response')
+  
 
 def reset_data_registers_cb(reg_type, address, val):
     # usage of global isn't great, but okay for an example
@@ -138,7 +154,48 @@ with open('registers.json', 'r') as file:
 # each register can have a different callback
 # coils and holding register support callbacks for set and get
 register_definitions['COILS']['Door Ring']['on_set_cb'] =  my_coil_set_cb
-register_definitions['COILS']['Door Ring']['off_set_cb'] = my_coil_set_cb
+register_definitions['COILS']['Door Ring']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Water to coil']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Water to coil']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Cooling Drain']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Cooling Drain']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Compresed air to chamber']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Compresed air to chamber']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['ATM Air']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['ATM Air']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Fast Exah']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Fast Exah']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Vacuum']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Vacuum']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Condence']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Condence']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Door Ring']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Door Ring']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Cool pipe Flush']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Cool pipe Flush']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Vacumm breaker']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Vacumm breaker']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Heather']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Heather']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Vac pump']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Vac pump']['on_get_cb'] = my_coil_get_cb
+
+register_definitions['COILS']['Water pump']['on_set_cb'] =  my_coil_set_cb
+register_definitions['COILS']['Water pump']['on_get_cb'] = my_coil_get_cb
+
+
 
 # register_definitions['COILS']['Door Ring']['on_get_cb'] = my_coil_get_cb
 
@@ -151,12 +208,56 @@ register_definitions['ISTS']['Door Close']['on_get_cb'] = \
 
 register_definitions['ISTS']['Ring Open']['on_get_cb'] = \
       my_discrete_inputs_register_get_cb
-# register_definitions['ISTS']['Ring Close']['on_get_cb'] = \
-#     my_discrete_inputs_register_get_cb
 
+register_definitions['ISTS']['Ring Close']['on_get_cb'] = \
+      my_discrete_inputs_register_get_cb
+
+register_definitions['ISTS']['Flow sw Gen Pump']['on_get_cb'] = \
+      my_discrete_inputs_register_get_cb
+
+register_definitions['ISTS']['Flow sw Var Pump']['on_get_cb'] = \
+      my_discrete_inputs_register_get_cb
+
+register_definitions['ISTS']['Ring Close2']['on_get_cb'] = \
+      my_discrete_inputs_register_get_cb
+
+register_definitions['ISTS']['Ring Close3']['on_get_cb'] = \
+      my_discrete_inputs_register_get_cb
+
+register_definitions['ISTS']['Ring Close4']['on_get_cb'] = \
+      my_discrete_inputs_register_get_cb
+
+register_definitions['ISTS']['Gasket sw']['on_get_cb'] = \
+      my_discrete_inputs_register_get_cb
+
+
+
+#     my_discrete_inputs_register_get_cb
 
 register_definitions['IREGS']['EXAMPLE_IREG']['on_get_cb'] = \
     my_inputs_register_get_cb
+
+register_definitions['IREGS']['Elect Low']['on_get_cb'] = \
+    my_inputs_register_get_cb
+
+register_definitions['IREGS']['Chamber Press']['on_get_cb'] = \
+    my_inputs_register_get_cb
+
+register_definitions['IREGS']['Elect Chamber']['on_get_cb'] = \
+    my_inputs_register_get_cb
+
+register_definitions['IREGS']['Chamber Temp']['on_get_cb'] = \
+    my_inputs_register_get_cb
+
+
+register_definitions['IREGS']['Chamber Temp2']['on_get_cb'] = \
+    my_inputs_register_get_cb
+
+register_definitions['IREGS']['Drain Temp']['on_get_cb'] = \
+    my_inputs_register_get_cb
+
+
+
 
 # reset all registers back to their default value with a callback
 register_definitions['COILS']['RESET_REGISTER_DATA_COIL']['on_set_cb'] = \
