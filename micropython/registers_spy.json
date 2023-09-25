@@ -4,88 +4,7 @@
             "register": 30,
             "len": 1,
             "val": 0
-        },
-         "Reserva1": {
-            "register": 0,
-            "len": 1,
-            "val": 0
-        },
-         "Reserva2": {
-            "register": 1,
-            "len": 1,
-            "val": 0
-        },
-         "Water to coil": {
-            "register": 2,
-            "len": 1,
-             "val": 0
-              
-        },
-        "Cooling Drain": {
-            "register": 3,
-            "len": 1,
-            "val": 0
-        },
-        "Compresed air to chamber": {
-            "register": 4,
-            "len": 1,
-            "val": 0
-        },
-        "ATM Air": {
-            "register": 5,
-            "len": 1,
-            "val": 0
-        },
-        "Fast Exah": {
-            "register": 6,
-            "len": 1,
-            "val": 0
-        },
-        "Vacuum": {
-            "register": 7,
-            "len": 1,
-            "val": 0
-        },
-        "Condence": {
-            "register": 8,
-            "len": 1,
-            "val": 0
-        },
-        "Door Ring": {
-            "register": 9,
-            "len": 1,
-            "val": 0
-        },
-        "Cool pipe Flush": {
-            "register": 10,
-            "len": 1,
-            "val": 0
-         },
-         "Vacumm breaker": {
-            "register": 11,
-            "len": 1,
-            "val": 0
-         },
-         "Heather": {
-            "register": 12,
-            "len": 1,
-            "val": 0
-         },
-         "Vac pump": {
-            "register": 13,
-            "len": 1,
-            "val": 0
-         },
-         "Circ pump": {
-            "register": 14,
-            "len": 1,
-            "val": 0
-         },
-         "Water pump": {
-            "register": 15,
-            "len": 1,
-            "val": 0
-         }
+        }
     },
     "ISTS": {
         "EXAMPLE_ISTS": {
@@ -136,9 +55,89 @@
             "register": 108,
             "len": 1,
             "val": 0
-        }
-    
-    
+        },
+        "Reserva1": {
+            "register": 109,
+            "len": 1,
+            "val": 0
+        },
+        "Reserva2": {
+            "register": 110,
+            "len": 1,
+            "val": 0
+        },
+        "Water to coil": {
+            "register": 111,
+            "len": 1,
+             "val": 0
+        },
+                  
+        "Cooling Drain": {
+            "register": 112,
+            "len": 1,
+            "val": 0
+        },
+        "Compresed air to chamber": {
+            "register": 113,
+            "len": 1,
+            "val": 0
+        },
+        "ATM Air": {
+            "register": 114,
+            "len": 1,
+            "val": 0
+        },
+        "Fast Exah": {
+            "register": 115,
+            "len": 1,
+            "val": 0
+        },
+        "Vacuum": {
+            "register": 116,
+            "len": 1,
+            "val": 0
+        },
+        "Condence": {
+            "register": 117,
+            "len": 1,
+            "val": 0
+        },
+        "Door Ring": {
+            "register": 118,
+            "len": 1,
+            "val": 0
+        },
+        "Cool pipe Flush": {
+            "register": 119,
+            "len": 1,
+            "val": 0
+         },
+         "Vacuum breaker": {
+            "register": 120,
+            "len": 1,
+            "val": 0
+         },
+         
+         "Heather": {
+            "register": 121,
+            "len": 1,
+            "val": 0
+         },
+         "Vac pump": {
+            "register": 122,
+            "len": 1,
+            "val": 0
+         },
+         "Circ pump": {
+            "register": 123,
+            "len": 1,
+            "val": 0
+          },   
+         "Water pump": {
+            "register": 124,
+            "len": 1,
+            "val": 0 
+         }
 
     },
     "IREGS": {
@@ -183,4 +182,4 @@
     }
         
 
-}
+    }

@@ -4,33 +4,30 @@ import pcf8574
 import utime
 
 # Pin d
-OE = machine.Pin(17, machine.Pin.OUT)
-LE_U7 = machine.Pin(27, machine.Pin.OUT)
-LE_U8 = machine.Pin(14, machine.Pin.OUT)
-OE_U9 = machine.Pin(13, machine.Pin.OUT)
-OE_U10 = machine.Pin(12, machine.Pin.OUT)
+# OE = machine.Pin(17, machine.Pin.OUT)
+# LE_U7 = machine.Pin(27, machine.Pin.OUT)
+# LE_U8 = machine.Pin(14, machine.Pin.OUT)
+# OE_U9 = machine.Pin(13, machine.Pin.OUT)
+# OE_U10 = machine.Pin(12, machine.Pin.OUT)
 S0 = machine.Pin(15, machine.Pin.OUT)
 S1 = machine.Pin(2, machine.Pin.OUT)
 S2 = machine.Pin(4, machine.Pin.OUT)
 S3 = machine.Pin(16, machine.Pin.OUT)
 
 
-DI0 = machine.Pin(26, machine.Pin.IN)
-DI1 = machine.Pin(25, machine.Pin.IN)
-DI2 = machine.Pin(33, machine.Pin.IN)
-DI3 = machine.Pin(32, machine.Pin.IN)
-DI4 = machine.Pin(35, machine.Pin.IN)
-DI5 = machine.Pin(34, machine.Pin.IN)
-DI6 = machine.Pin(39, machine.Pin.IN)
-DI7 = machine.Pin(36, machine.Pin.IN)
+DI0 = machine.Pin(27, machine.Pin.IN)
+DI1 = machine.Pin(26, machine.Pin.IN)
+DI2 = machine.Pin(25, machine.Pin.IN)
+DI3 = machine.Pin(33, machine.Pin.IN)
+DI4 = machine.Pin(32, machine.Pin.IN)
+DI5 = machine.Pin(35, machine.Pin.IN)
+DI6 = machine.Pin(34, machine.Pin.IN)
+DI7 = machine.Pin(39, machine.Pin.IN)
+DI8 = machine.Pin(36, machine.Pin.IN)
 
 sdaPIN=machine.Pin(21)
 sclPIN=machine.Pin(22)
 
-cs_pin = machine.Pin(5, machine.Pin.OUT)
-# clk_pin = machine.Pin(18, machine.Pin.OUT)
-# miso_pin = machine.Pin(19, machine.Pin.IN)
-# mosi_pin = machine.Pin(23, machine.Pin.OUT)
 
 PCF8574_1address = 0x20
 PCF8574_2address = 0x21
@@ -42,7 +39,7 @@ current_register_l =0b000000000
 
 # Create instance
 i2c= machine.SoftI2C(sclPIN, sdaPIN)
-pcf = pcf8574.PCF8574(i2c, PCF8574_1address)
+# pcf = pcf8574.PCF8574(i2c, PCF8574_1address)
 
 # spi = machine.SPI(1, baudrate=100000, polarity=0, phase=0, sck=clk_pin, mosi=None, miso=miso_pin)
 # Define SPI bus pins
@@ -95,19 +92,17 @@ def read_DI(DI):
     offset_DI = 100
     DI = DI-offset_DI
     if DI > 7:
-        OE_U9.on()
-        OE_U10.off()
+        S1.on()
         utime.sleep_ms(10)
+        S1.off()
         DI_value = DI0.value()
-        OE_U10.on()
-        utime.sleep_ms(10)
+        
     elif 0 <= DI <= 7:
-        OE_U10.on()
-        OE_U9.off()
+        S1.on()
         utime.sleep_ms(10)
+        S1.off()
         DI_value = globals()[f"DI{DI}"].value()
-        OE_U9.on()
-        utime.sleep_ms(10)
+       
        
     else:
         DI_value = None
@@ -115,10 +110,10 @@ def read_DI(DI):
     return DI_value
 
 def read_PCF8574(address):
-     S1.off()
+     
      S2.off()
      utime.sleep_ms(10)
-     S1.on()
+   
      S2.on()
 #      pcf= pcf8574.PCF8574(i2c,address)
      value = i2c.readfrom(address, 1)
